@@ -13,33 +13,29 @@ class _realTimeGraphState extends State<realTimeGraph3> {
   @override
   Widget build(BuildContext context) {
     final streamWt = positiveDataStream(volume);
-    return Scaffold(
-      body: SizedBox(
-        width: double.maxFinite,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Volume:',
-                ),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width*0.8,
+      height: MediaQuery.of(context).size.width * 0.5,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: RealTimeGraph(
+          stream: streamWt.map((value) => value),
+          graphColor: Colors.redAccent,
+          graphStroke: 2,
+          displayMode: ChartDisplay.points,
+          xAxisColor: Colors.red,
+          yAxisColor: Colors.red,
+          // a
+          axisTextBuilder: (value) {
+            // Customize the x-axis labels
+            return Text('${value.toStringAsFixed(2)} ml',
+              style: TextStyle(
+                fontSize: 11,
+                color: Colors.black,
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width*0.8,
-                height: MediaQuery.of(context).size.width * 0.5,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: RealTimeGraph(
-                    stream: streamWt,
-                  ),
-                ),),
-            ],
-          ),
+            );},
         ),
-      ),
-    );
+      ),);
   }
   List<double> volume=[0.00354,
     0.00347,
@@ -78,5 +74,18 @@ class _realTimeGraphState extends State<realTimeGraph3> {
       return lst[i%sz]*1000000;
     }).asBroadcastStream();
 
+  }
+}
+class DisplayDoubleWidget extends StatelessWidget {
+  final double value;
+
+  DisplayDoubleWidget(this.value);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      value.toString(),
+      style: TextStyle(fontSize: 24),
+    );
   }
 }

@@ -15,8 +15,8 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                'assets/logo.jpg', // Ensure you have this image in the assets folder
-                height: 100,
+                'assets/cover.png', // Ensure you have this image in the assets folder
+                height: 150,
               ),
               SizedBox(height: 40),
               TextField(
@@ -39,9 +39,13 @@ class LoginPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Implement login logic
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> NameSearchPage()),);
+
                   String email = _emailController.text;
                   String password = _passwordController.text;
+                  // if(email=="test1@gmail.com"&&password=="test1") {
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => NameSearchPage()),);
+                  // }
                   print('Email: $email, Password: $password');
                 },
                 child: Text('Login'),

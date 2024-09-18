@@ -2,6 +2,9 @@ import 'dart:math';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:real_time_chart/real_time_chart.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'dart:convert';
+
 class realTimeGraph extends StatefulWidget {
   const realTimeGraph({Key? key}) : super(key: key);
 
@@ -10,36 +13,48 @@ class realTimeGraph extends StatefulWidget {
 }
 
 class _realTimeGraphState extends State<realTimeGraph> {
+  final _channel = WebSocketChannel.connect(
+    Uri.parse("ws://192.168.35.244:8080"),
+  );
   @override
   Widget build(BuildContext context) {
     final streamWt = positiveDataStream(wt);
-    return Scaffold(
-      body: SizedBox(
-        width: double.maxFinite,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Weight:',
+    return SizedBox(
+      width: MediaQuery.of(context).size.width*0.8,
+      height: MediaQuery.of(context).size.width * 0.5,
+      child: Padding(
+        padding: const EdgeInsets.all(17.0),
+        child: RealTimeGraph(
+          stream: _channel.stream.map((data) {
+            // print(data+ "haha2");
+            // Assuming the incoming data is JSON encoded string
+            // String jsonString = utf8.decode(data);
+            // print(jsonString);
+            final Map<String,dynamic> jsonData = json.decode(data.toString());
+            // print(jsonData);
+            // print(jsonData);
+            // Extract the relevant value
+            final value = jsonData['message'];
+            final Map<String,dynamic> value2 = json.decode(value);
+            // print(value2);
+// print(''
+            return value2['total_volume'].toDouble();
+          }),
+          graphColor: Colors.greenAccent,
+          graphStroke: 2,
+          displayMode: ChartDisplay.points,
+          xAxisColor: Colors.green,
+          yAxisColor: Colors.green,
+            axisTextBuilder: (value) {
+              // Customize the x-axis labels
+              return Text('${value.toStringAsFixed(2)} ml',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.black,
                 ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width*0.8,
-                height: MediaQuery.of(context).size.width * 0.5,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: RealTimeGraph(
-                    stream: streamWt,
-                  ),
-                ),),
-            ],
-          ),
+              );}
         ),
-      ),
-    );
+      ),);
   }
   List<double> wt=[3536.4,3466.4, 3445.7, 3505.1,3581.1,3560.5,3525.2
     ,3242.9
@@ -72,5 +87,11 @@ class _realTimeGraphState extends State<realTimeGraph> {
       return lst[i%sz];
     }).asBroadcastStream();
 
+  }
+  @override
+  void dispose() {
+    _channel.sink.close();
+    // _controller.dispose();
+    super.dispose();
   }
 }

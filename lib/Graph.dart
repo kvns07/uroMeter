@@ -18,39 +18,57 @@ class _GraphState extends State<Graph> {
   @override
    Widget build(BuildContext context) {
       return Scaffold(
-        // appBar: AppBar(
-        //   title: Text(widget.title),
-        // ),
+        appBar: AppBar(
+          title: Text("Patient's Data"),
+        ),
         body: SizedBox(
           width: double.maxFinite,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    'Volume:',
+                  ),
+                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.width * 0.6,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: realTimeGraph(
                     ),
                   ),),
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    'FlowRate:',
+                  ),
+                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.width * 0.6,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: realTimeGraph2(
                     ),
                   ),),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width * 0.8,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: realTimeGraph3(
-                    ),
-                  ),),
+                // Padding(
+                //   padding: EdgeInsets.all(16.0),
+                //   child: Text(
+                //     'Volume:',
+                //   ),
+                // ),
+                // SizedBox(
+                //   width: MediaQuery.of(context).size.width,
+                //   height: MediaQuery.of(context).size.width * 0.6,
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(16.0),
+                //     child: realTimeGraph3(
+                //     ),
+                //   ),),
                 // realTimeGraph(),
               ],
             ),
@@ -58,4 +76,13 @@ class _GraphState extends State<Graph> {
         ),
       );
     }
+  // final channel = WebSocketChannel.connect(
+  //   Uri.parse('wss://echo.websocket.events'),
+  // );
+  // StreamBuilder(
+  // stream: channel.stream,
+  // builder: (context, snapshot) {
+  // return Text(snapshot.hasData ? '${snapshot.data}' : '');
+  // },
+  // )
   }
